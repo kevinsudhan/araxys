@@ -85,7 +85,6 @@ const structuredData = {
       description: site.description,
       url: site.url,
       email: site.email,
-      sameAs: [site.linkedin],
       areaServed: "Worldwide",
       knowsAbout: services.map((service) => service.name),
       hasOfferCatalog: {
@@ -96,7 +95,7 @@ const structuredData = {
           itemOffered: {
             "@type": "Service",
             name: service.name,
-            description: service.solution,
+            description: service.line,
           },
         })),
       },

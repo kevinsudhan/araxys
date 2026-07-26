@@ -23,15 +23,14 @@ export function Hero() {
 
             <Reveal delay={80}>
               <h1 id="hero-title" className="mt-7 text-display text-ink">
-                Engineering AI Systems That Actually Transform Businesses
+                AI systems built around how you already work
               </h1>
             </Reveal>
 
             <Reveal delay={160}>
               <p className="mt-7 text-lead text-ink-muted">
-                We design and build custom AI solutions—from autonomous agents and voice assistants
-                to enterprise knowledge systems and intelligent automations—tailored to the way your
-                business works.
+                Agents, voice and automation — designed for your process, deployed in your
+                stack, owned by you.
               </p>
             </Reveal>
 
@@ -41,8 +40,8 @@ export function Hero() {
                   Schedule a Consultation
                   <ArrowRight />
                 </ButtonLink>
-                <ButtonLink href="#services" variant="secondary" size="lg">
-                  Explore Services
+                <ButtonLink href="#work" variant="secondary" size="lg">
+                  See our work
                 </ButtonLink>
               </div>
             </Reveal>

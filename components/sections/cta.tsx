@@ -39,13 +39,12 @@ export function Cta() {
                 id="cta-title"
                 className="mt-7 text-headline text-[#FAFAF8]"
               >
-                Let&apos;s Build Your Next Intelligent System.
+                Let&apos;s build your next system.
               </h2>
 
               <p className="mx-auto mt-6 max-w-[52ch] text-lead text-[#C3CEE4]">
-                Bring us the process that is costing your team the most hours. We will map it, tell
-                you honestly which parts are worth automating, and architect a system around the way
-                you already work.
+                Bring us the process costing your team the most hours. We&apos;ll tell you
+                honestly which parts are worth automating.
               </p>
 
               <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">

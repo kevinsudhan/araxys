@@ -5,8 +5,8 @@ import { services, site } from "@/lib/site";
 
 const columns = [
   {
-    heading: "Services",
-    links: services.slice(0, 6).map((service) => ({
+    heading: "What we build",
+    links: services.map((service) => ({
       label: service.name,
       href: `#${service.id}`,
     })),
@@ -14,20 +14,16 @@ const columns = [
   {
     heading: "Company",
     links: [
-      { label: "How We Work", href: "#process" },
-      { label: "Why Custom AI", href: "#why-custom" },
-      { label: "Industries", href: "#industries" },
-      { label: "Featured Solutions", href: "#solutions" },
-      { label: "Why Araxys", href: "#why-araxys" },
+      { label: "How it works", href: "#process" },
+      { label: "Selected work", href: "#work" },
       { label: "FAQ", href: "#faq" },
     ],
   },
   {
     heading: "Contact",
     links: [
-      { label: "Schedule a Consultation", href: site.schedulingUrl },
+      { label: "Schedule a consultation", href: site.schedulingUrl },
       { label: site.email, href: `mailto:${site.email}` },
-      { label: "LinkedIn", href: site.linkedin },
     ],
   },
 ];

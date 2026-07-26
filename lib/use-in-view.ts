@@ -16,13 +16,31 @@ function getObserver(): IntersectionObserver | null {
   observer ??= new IntersectionObserver(
     (entries) => {
       for (const entry of entries) {
-        if (!entry.isIntersecting) continue;
+        /*
+         * `isIntersecting` alone is not enough. The observer samples on a
+         * frame, so an element that enters and leaves between two samples —
+         * a fast flick, or a jump to an anchor link — is reported only in its
+         * final, non-intersecting state and would stay hidden forever. Any
+         * element already above the viewport has been passed, so reveal it.
+         */
+        const alreadyPassed = entry.boundingClientRect.bottom <= 0;
+        if (!entry.isIntersecting && !alreadyPassed) continue;
         callbacks.get(entry.target)?.(true);
         observer?.unobserve(entry.target);
         callbacks.delete(entry.target);
       }
     },
-    { rootMargin: "0px 0px -12% 0px", threshold: 0.12 },
+    /*
+     * threshold MUST stay 0.
+     *
+     * A ratio threshold is a fraction of the *element*, not of the viewport, so
+     * any element taller than viewport/threshold can never reach it and stays
+     * at opacity 0 forever — a permanently blank section. A grid of ten cards
+     * on a narrow screen is exactly that tall. The negative bottom margin is
+     * what holds the reveal until the element is properly on screen, and it is
+     * a fraction of the viewport, so it behaves the same at every element size.
+     */
+    { rootMargin: "0px 0px -10% 0px", threshold: 0 },
   );
   return observer;
 }

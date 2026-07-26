@@ -15,12 +15,12 @@ export function Metrics() {
       <Container className="relative py-16 lg:py-20">
         <Reveal>
           <h2 id="metrics-title" className="label text-ink-faint">
-            How we build, in five characteristics
+            Terms of every engagement
           </h2>
         </Reveal>
 
         <Reveal delay={80}>
-          <dl className="mt-10 grid gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-2 lg:grid-cols-5">
+          <dl className="mt-10 grid gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
             {/* Each dt precedes its dd in the DOM, as the spec requires; `order`
                 lifts the figure above its label visually. */}
             {metrics.map((metric) => (
@@ -41,8 +41,6 @@ export function Metrics() {
                 </dd>
               </div>
             ))}
-            {/* Keeps the hairline grid flush when five cells sit in two columns. */}
-            <div aria-hidden className="hidden bg-surface sm:block lg:hidden" />
           </dl>
         </Reveal>
       </Container>

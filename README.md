@@ -12,22 +12,37 @@ npm run typecheck
 
 ---
 
-## Replace before launch
+## Still outstanding
 
-Everything below is placeholder content and lives in [`lib/site.ts`](lib/site.ts).
+All copy lives in [`lib/site.ts`](lib/site.ts).
 
-| What | Where | Note |
-| --- | --- | --- |
-| `site.url` | `lib/site.ts` | Drives canonical URL, sitemap, robots, JSON-LD. |
-| `site.email`, `site.linkedin` | `lib/site.ts` | Used in header, footer and CTA. |
-| `site.schedulingUrl` | `lib/site.ts` | Currently `#contact`. Point at Cal.com / Calendly / HubSpot. |
-| `metrics[].value` | `lib/site.ts` | **Marketing figures — substitute your own defensible numbers.** |
-| `testimonials` | `lib/site.ts` | **Placeholder quotes. Do not publish until replaced with approved client quotes.** Attribution is deliberately anonymised (initials + role + sector) so nothing reads as a named endorsement while it is still placeholder copy. |
+| What | Note |
+| --- | --- |
+| `site.schedulingUrl` | Currently a composed `mailto:`. Point at Cal.com / Calendly when one exists — no other file changes. |
+| LinkedIn | Removed until a company page exists. Re-add to `site` and to the footer's Contact column plus the `sameAs` array in `app/layout.tsx`. |
+| `work` | One entry (EBS). Add more as they ship. |
 
-Service, process, industry, solution and FAQ copy is written to be accurate to a custom
-AI engineering practice, but read it against how you actually sell before shipping.
+### Two rules that keep this site honest
 
----
+**`metrics` are commitments, not measurements.** Each figure is a term of the engagement
+the client can verify on day one — not an averaged outcome we cannot substantiate. If you
+add one, it must pass the same test.
+
+**`work` is shipped, named, publicly verifiable work only.** Every entry needs a live `url`.
+`clientFigures` are the *client's* published numbers and render under an explicit
+"the client's own published figures" label — never present them as results Araxys produced.
+Anonymised engagements and invented testimonial quotes do not belong here; a thin section of
+real work outperforms a full one of placeholders.
+
+### The word budget
+
+The page is **~620 words**. It was ~2,900 across nine sections, and it read as a brochure
+nobody finishes: ten services with three paragraphs each, plus eight "solutions" and nine
+"industries" that were three overlapping lists of the same claim.
+
+The structure is now Hero → Terms → What we build (6) → How it works (4) → Work → FAQ (5) → CTA.
+One item, one line. Industries is a single sentence under the services grid, not a grid of its
+own. Before adding copy, cut some — the budget is the feature.
 
 ## Design system
 
@@ -82,6 +97,23 @@ ran. Three things prevent that:
 3. A 4-second timer drops the `js` class if nothing has revealed, so a blocked hydration
    degrades to *visible and unanimated* rather than blank.
 
+**`threshold` must stay `0`.** It was `0.12`, and a ratio threshold is a fraction of the
+*element*, not of the viewport — so any element taller than `viewport / 0.12` could never
+reach it and stayed at `opacity: 0` permanently. The ten-card services grid was 8,182px tall
+against an 820px viewport: a maximum achievable ratio of 0.088, i.e. a permanently blank
+section, and worse at narrow widths. The negative bottom `rootMargin` is what holds the
+reveal until an element is properly on screen, and it is a fraction of the viewport, so it
+behaves identically at every element size.
+
+The callback also reveals any element whose `boundingClientRect.bottom <= 0`. The observer
+samples on a frame, so an element that enters and leaves between two samples is reported only
+in its final non-intersecting state; anything already above the viewport has been passed and
+should be visible. This matters on load with a restored scroll position or a deep link.
+
+Regression test, run in the browser console at 375px and 1280px: scroll the page in
+half-viewport steps and assert that no `[data-reveal]` with a computed `opacity` of `0` is
+ever within the viewport.
+
 ## The hero schematic
 
 An engineering drawing, not artwork: orthogonal routing on a shared vertical trunk with one
@@ -95,9 +127,9 @@ verified to sit inside their node boxes at every breakpoint.
 Verified in both themes: every text/background pair meets WCAG AA (measured 4.8–17.8:1;
 lowest is the 11px index label at 4.8:1). Plus: one `h1`, ordered headings, skip link, visible
 focus rings via `:focus-visible`, `aria-expanded`/`aria-controls`/`role="region"` on the
-accordion, keyboard-operable process steps (`group-focus-within` mirrors every hover
-disclosure, which also makes them work on touch), counters that expose only the final figure
-to screen readers, and an `sr-only` text description of the schematic.
+accordion, counters that expose only the final figure to screen readers, and an `sr-only`
+text description of the schematic. The process steps no longer hide anything behind hover, so
+the `group-focus-within` mirroring they needed is gone with it.
 
 ## SEO
 
@@ -114,7 +146,7 @@ components/
   layout/          header, footer, logo, theme toggle
   sections/        one file per page section
   ui/              container, section, button, reveal, counter
-  icons/           hand-drawn glyph sets (service, industry, value)
+  icons/           hand-drawn service glyphs
 lib/               site content, shared observer, class joiner
 ```
 
