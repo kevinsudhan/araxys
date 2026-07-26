@@ -11,16 +11,41 @@ export const site = {
   name: "Araxys",
   role: "AI Engineering & Automation",
   url: "https://araxys.dev",
-  email: "hello@araxys.dev",
+  email: "contact@araxys.dev",
+  phones: [
+    { display: "+91 89391 53390", e164: "+918939153390" },
+    { display: "+91 63806 69805", e164: "+916380669805" },
+  ],
   /**
-   * No booking tool yet, so every "schedule" CTA opens a composed email.
-   * Swap for a Cal.com / Calendly link when one exists — nothing else changes.
+   * Scheduling — Calendly free tier.
+   *
+   * `url` drives every "schedule" CTA on the site. Clear it and they all fall
+   * back to a composed email, so no call to action is ever a dead end.
+   *
+   * This is Calendly's *popup* rather than their inline widget: the inline
+   * snippet loads a third-party script and a 700px iframe on every page view,
+   * whereas the popup fetches nothing until a visitor actually shows intent.
    */
-  schedulingUrl:
-    "mailto:hello@araxys.dev?subject=Consultation%20request&body=A%20line%20or%20two%20on%20the%20process%20you%20want%20to%20automate%2C%20and%20we%27ll%20find%20a%20time.",
+  booking: {
+    url: "https://calendly.com/kevin-araxys/30min",
+    widgetJs: "https://assets.calendly.com/assets/external/widget.js",
+    widgetCss: "https://assets.calendly.com/assets/external/widget.css",
+  },
   description:
     "Araxys designs and builds custom AI systems — agents, voice, retrieval and automation — engineered around the way your business already works.",
 } as const;
+
+/** Composed email used wherever a booking link does not yet exist. */
+export const enquiryMailto = `mailto:${site.email}?subject=${encodeURIComponent(
+  "Consultation request",
+)}&body=${encodeURIComponent(
+  "A line or two on the process you want to automate, and we'll find a time.",
+)}`;
+
+/** Single target for every "schedule" call to action on the site. */
+export const bookingHref: string = site.booking.url || enquiryMailto;
+
+export const bookingIsLive = Boolean(site.booking.url);
 
 export const nav = [
   { label: "What we build", href: "#services" },

@@ -25,6 +25,19 @@ const sizes: Record<Size, string> = {
   lg: "h-12 px-6 text-[0.9375rem]",
 };
 
+/**
+ * Button styling as a plain string, for elements that cannot be a `Button` or
+ * `ButtonLink` — currently `BookCall`, which owns its own anchor so the Cal
+ * embed can bind to it.
+ */
+export function buttonClasses({
+  variant = "primary",
+  size = "md",
+  className,
+}: { variant?: Variant; size?: Size; className?: string } = {}) {
+  return cn(base, variants[variant], variant === "quiet" ? "h-10" : sizes[size], className);
+}
+
 type ButtonBaseProps = {
   variant?: Variant;
   size?: Size;

@@ -26,7 +26,10 @@ export function Work() {
             <article className="overflow-hidden rounded-lg border border-line bg-surface">
               <div className="grid lg:grid-cols-[minmax(0,1fr)_minmax(0,0.85fr)]">
                 {/* ---------------------------------------------- the record */}
-                <div className="flex flex-col p-8 lg:p-12">
+                {/* min-w-0: grid items default to min-width:auto, so the
+                    unbreakable display URL would otherwise set a floor wider
+                    than a 320px viewport and push the card off-screen. */}
+                <div className="flex min-w-0 flex-col p-8 lg:p-12">
                   <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
                     <p className="label text-navy">{project.sector}</p>
                     <span aria-hidden className="h-px w-5 bg-line-strong" />
@@ -48,7 +51,7 @@ export function Work() {
                     href={project.url}
                     target="_blank"
                     rel="noreferrer noopener"
-                    className="group inline-flex w-fit items-center gap-2 border-b border-line-strong pb-1 text-[0.9375rem] font-medium text-ink transition-colors duration-200 hover:border-navy hover:text-navy"
+                    className="group inline-flex w-fit max-w-full items-center gap-2 border-b border-line-strong pb-1 text-[0.9375rem] font-medium break-all text-ink transition-colors duration-200 hover:border-navy hover:text-navy"
                   >
                     {project.displayUrl}
                     <ArrowRight className="-rotate-45" />
@@ -57,7 +60,7 @@ export function Work() {
                 </div>
 
                 {/* ------------------------------------------------- the scope */}
-                <div className="border-t border-line bg-sunken p-8 lg:border-t-0 lg:border-l lg:p-12">
+                <div className="min-w-0 border-t border-line bg-sunken p-8 lg:border-t-0 lg:border-l lg:p-12">
                   <h4 className="label text-ink-faint">What we built</h4>
                   <ul className="mt-6 flex flex-col gap-3.5">
                     {project.scope.map((item) => (

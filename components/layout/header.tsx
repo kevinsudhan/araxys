@@ -5,7 +5,8 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Logo } from "@/components/layout/logo";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
-import { ArrowRight, ButtonLink } from "@/components/ui/button";
+import { BookCall } from "@/components/ui/book-call";
+import { ArrowRight, buttonClasses } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { nav, site } from "@/lib/site";
 import { cn } from "@/lib/utils";
@@ -28,19 +29,20 @@ export function Header() {
     };
   }, []);
 
-  // Lock the page behind the mobile sheet and close it on Escape.
+  // Close on Escape.
+  //
+  // There is deliberately no body scroll lock. This is a dropdown that pushes
+  // the header down, not a fullscreen modal — it covers roughly half the
+  // viewport, so locking the page behind it only traps the reader. The previous
+  // implementation also captured and restored `body.style.overflow`, which
+  // latches permanently the moment it ever restores a stale "hidden".
   useEffect(() => {
     if (!open) return;
-    const previous = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") setOpen(false);
     };
     window.addEventListener("keydown", onKey);
-    return () => {
-      document.body.style.overflow = previous;
-      window.removeEventListener("keydown", onKey);
-    };
+    return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
   return (
@@ -72,10 +74,16 @@ export function Header() {
 
         <div className="flex items-center gap-2.5">
           <ThemeToggle />
-          <ButtonLink href={site.schedulingUrl} className="hidden sm:inline-flex">
-            Schedule a Consultation
-            <ArrowRight />
-          </ButtonLink>
+          {/* Visibility lives on a wrapper, never on the button itself:
+              buttonClasses() bakes in `inline-flex`, and cn() does not resolve
+              Tailwind conflicts, so a `hidden` sitting alongside it loses to
+              stylesheet order and the button overflows the viewport. */}
+          <div className="hidden sm:block">
+            <BookCall className={buttonClasses()}>
+              Schedule a Consultation
+              <ArrowRight />
+            </BookCall>
+          </div>
 
           <button
             type="button"
@@ -83,7 +91,7 @@ export function Header() {
             aria-expanded={open}
             aria-controls="mobile-nav"
             aria-label={open ? "Close menu" : "Open menu"}
-            className="inline-flex size-9 items-center justify-center rounded-md border border-line-strong bg-surface text-ink transition-colors duration-200 hover:border-ink/25 lg:hidden"
+            className="inline-flex size-11 items-center justify-center rounded-md border border-line-strong bg-surface text-ink transition-colors duration-200 hover:border-ink/25 lg:hidden"
           >
             <svg aria-hidden viewBox="0 0 20 20" fill="none" className="size-[17px]">
               <path
@@ -124,15 +132,30 @@ export function Header() {
                   ))}
                 </ul>
               </nav>
-              <ButtonLink
-                href={site.schedulingUrl}
-                size="lg"
-                onClick={() => setOpen(false)}
-                className="mt-6 w-full sm:hidden"
-              >
-                Schedule a Consultation
-                <ArrowRight />
-              </ButtonLink>
+              <div className="mt-6 sm:hidden">
+                <BookCall
+                  onClick={() => setOpen(false)}
+                  className={buttonClasses({ size: "lg", className: "w-full" })}
+                >
+                  Schedule a Consultation
+                  <ArrowRight />
+                </BookCall>
+              </div>
+
+              {/* On a phone, calling is often the shortest path. */}
+              <ul className="mt-5 flex flex-col border-t border-line pt-3 sm:hidden">
+                {site.phones.map((phone) => (
+                  <li key={phone.e164}>
+                    <a
+                      href={`tel:${phone.e164}`}
+                      onClick={() => setOpen(false)}
+                      className="-mx-2 inline-block px-2 py-2.5 text-[0.9375rem] text-ink-muted transition-colors hover:text-ink"
+                    >
+                      {phone.display}
+                    </a>
+                  </li>
+                ))}
+              </ul>
             </Container>
           </motion.div>
         ) : null}

@@ -18,7 +18,7 @@ All copy lives in [`lib/site.ts`](lib/site.ts).
 
 | What | Note |
 | --- | --- |
-| `site.schedulingUrl` | Currently a composed `mailto:`. Point at Cal.com / Calendly when one exists — no other file changes. |
+| `site.booking.url` | **Empty.** Until it is set, every "schedule" CTA falls back to a composed email. Paste your Calendly event link and the whole site switches to real booking — that one line is the only edit. See [Scheduling](#scheduling). |
 | LinkedIn | Removed until a company page exists. Re-add to `site` and to the footer's Contact column plus the `sameAs` array in `app/layout.tsx`. |
 | `work` | One entry (EBS). Add more as they ship. |
 
@@ -43,6 +43,37 @@ nobody finishes: ten services with three paragraphs each, plus eight "solutions"
 The structure is now Hero → Terms → What we build (6) → How it works (4) → Work → FAQ (5) → CTA.
 One item, one line. Industries is a single sentence under the services grid, not a grid of its
 own. Before adding copy, cut some — the budget is the feature.
+
+## Scheduling
+
+Three ways to reach us, in descending order of commitment: book a call, email
+`contact@araxys.dev`, or ring one of the two numbers. All three live in `site` in
+[`lib/site.ts`](lib/site.ts) and render in the header, hero, closing CTA and footer.
+
+Booking runs on **Calendly's free tier**. To turn it on, create the event and paste its
+link — nothing else changes:
+
+```ts
+booking: {
+  url: "https://calendly.com/araxys/30min",   // ← the only edit
+  widgetJs:  "https://assets.calendly.com/assets/external/widget.js",
+  widgetCss: "https://assets.calendly.com/assets/external/widget.css",
+}
+```
+
+[`BookCall`](components/ui/book-call.tsx) is an anchor before it is anything else:
+
+- No link configured, JS off, or Calendly blocked → it still works, falling back to a
+  composed email. No CTA is ever a dead button.
+- The widget loads on **intent** (hover, focus, touch), never on page load — so visitors
+  who don't book never fetch it, and the homepage keeps its no-external-requests property.
+- If the widget is ready at click time the popup opens in place; if not, the anchor simply
+  navigates to the Calendly page. The visitor books either way.
+
+Swapping provider later means changing `site.booking` and the loader in that one file.
+Self-hosting ([cal.diy](https://github.com/calcom/cal.diy)) was evaluated and rejected: it
+is a full Cal.com fork needing PostgreSQL, NextAuth, calendar OAuth and SMTP as a
+separately deployed application — a database to run for a booking link.
 
 ## Design system
 

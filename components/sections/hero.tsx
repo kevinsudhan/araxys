@@ -1,5 +1,6 @@
 import { ArchitectureDiagram } from "@/components/sections/architecture-diagram";
-import { ArrowRight, ButtonLink } from "@/components/ui/button";
+import { BookCall } from "@/components/ui/book-call";
+import { ArrowRight, ButtonLink, buttonClasses } from "@/components/ui/button";
 import { Container, EdgeRules } from "@/components/ui/container";
 import { Reveal } from "@/components/ui/reveal";
 import { site } from "@/lib/site";
@@ -36,10 +37,10 @@ export function Hero() {
 
             <Reveal delay={220}>
               <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
-                <ButtonLink href={site.schedulingUrl} size="lg">
+                <BookCall className={buttonClasses({ size: "lg" })}>
                   Schedule a Consultation
                   <ArrowRight />
-                </ButtonLink>
+                </BookCall>
                 <ButtonLink href="#work" variant="secondary" size="lg">
                   See our work
                 </ButtonLink>

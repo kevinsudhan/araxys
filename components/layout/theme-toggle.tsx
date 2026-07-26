@@ -25,12 +25,13 @@ export function ThemeToggle() {
     }
   }
 
+  // 44px on touch (the iOS minimum), tightened to 36px once a pointer exists.
   return (
     <button
       type="button"
       onClick={toggle}
       aria-label={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
-      className="inline-flex size-9 items-center justify-center rounded-md border border-line-strong bg-surface text-ink-muted transition-colors duration-200 hover:border-ink/25 hover:text-ink"
+      className="inline-flex size-11 items-center justify-center rounded-md border border-line-strong bg-surface text-ink-muted transition-colors duration-200 hover:border-ink/25 hover:text-ink lg:size-9"
     >
       {/* Both glyphs render; opacity swaps on the html.dark class so there is
           no icon flash before hydration. */}

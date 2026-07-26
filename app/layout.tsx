@@ -85,6 +85,14 @@ const structuredData = {
       description: site.description,
       url: site.url,
       email: site.email,
+      telephone: site.phones.map((phone) => phone.e164),
+      contactPoint: site.phones.map((phone) => ({
+        "@type": "ContactPoint",
+        contactType: "sales",
+        telephone: phone.e164,
+        email: site.email,
+        availableLanguage: ["en"],
+      })),
       areaServed: "Worldwide",
       knowsAbout: services.map((service) => service.name),
       hasOfferCatalog: {

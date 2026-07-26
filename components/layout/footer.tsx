@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Logo } from "@/components/layout/logo";
 import { Container, EdgeRules } from "@/components/ui/container";
-import { services, site } from "@/lib/site";
+import { bookingHref, services, site } from "@/lib/site";
 
 const columns = [
   {
@@ -22,8 +22,12 @@ const columns = [
   {
     heading: "Contact",
     links: [
-      { label: "Schedule a consultation", href: site.schedulingUrl },
+      { label: "Schedule a consultation", href: bookingHref },
       { label: site.email, href: `mailto:${site.email}` },
+      ...site.phones.map((phone) => ({
+        label: phone.display,
+        href: `tel:${phone.e164}`,
+      })),
     ],
   },
 ];
@@ -46,12 +50,15 @@ export function Footer() {
             {columns.map((column) => (
               <nav key={column.heading} aria-label={column.heading}>
                 <h2 className="label text-ink-faint">{column.heading}</h2>
-                <ul className="mt-5 flex flex-col gap-3">
+                {/* Padding rather than gap: it grows the tap target to ~34px
+                    without changing the visual rhythm. Negative margin keeps
+                    the text optically aligned with the column heading. */}
+                <ul className="mt-3 flex flex-col">
                   {column.links.map((link) => (
                     <li key={`${column.heading}-${link.label}`}>
                       <Link
                         href={link.href}
-                        className="text-sm text-ink-muted transition-colors duration-200 hover:text-ink"
+                        className="-mx-2 inline-block px-2 py-2 text-sm text-ink-muted transition-colors duration-200 hover:text-ink"
                         {...(link.href.startsWith("http")
                           ? { target: "_blank", rel: "noreferrer noopener" }
                           : {})}
