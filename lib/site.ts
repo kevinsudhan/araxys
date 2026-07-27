@@ -74,7 +74,7 @@ export type Metric = {
 export const metrics: Metric[] = [
   {
     value: 2,
-    suffix: " wks",
+    suffix: " weeks",
     label: "To architecture",
     note: "A documented design and a fixed price, before any code.",
   },
