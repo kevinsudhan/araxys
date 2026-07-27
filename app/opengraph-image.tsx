@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { ImageResponse } from "next/og";
 import { site } from "@/lib/site";
 
@@ -5,11 +7,16 @@ export const alt = `${site.name} — ${site.role}`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-const mark = `data:image/svg+xml;utf8,${encodeURIComponent(
-  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="56" height="56"><rect width="32" height="32" rx="8" fill="#FAFAF8"/><path d="M7 22h6v-6h6v-6h6" fill="none" stroke="#14213D" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
-)}`;
+/**
+ * The card sits on navy, so it takes the white mark. Satori cannot resolve a
+ * relative URL at render time, so the file is inlined as a data URI — read once
+ * at module scope rather than per request.
+ */
+const mark = `data:image/png;base64,${readFileSync(
+  join(process.cwd(), "public/brand/araxys-mark-white.png"),
+).toString("base64")}`;
 
-/** Generated at build time — no binary asset to keep in sync with the brand. */
+/** Generated at build time from the same mark the site header uses. */
 export default function OpengraphImage() {
   return new ImageResponse(
     (
