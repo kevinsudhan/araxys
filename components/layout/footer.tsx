@@ -1,22 +1,24 @@
 import Link from "next/link";
 import { Logo } from "@/components/layout/logo";
 import { Container, EdgeRules } from "@/components/ui/container";
+import { servicePathByServiceId } from "@/lib/services";
 import { bookingHref, services, site } from "@/lib/site";
 
+// Root-relative so every link works from a sub-page, not just the home page.
 const columns = [
   {
     heading: "What we build",
     links: services.map((service) => ({
       label: service.name,
-      href: `#${service.id}`,
+      href: servicePathByServiceId[service.id] ?? `/#${service.id}`,
     })),
   },
   {
     heading: "Company",
     links: [
-      { label: "How it works", href: "#process" },
-      { label: "Selected work", href: "#work" },
-      { label: "FAQ", href: "#faq" },
+      { label: "How it works", href: "/#process" },
+      { label: "Selected work", href: "/#work" },
+      { label: "FAQ", href: "/#faq" },
     ],
   },
   {

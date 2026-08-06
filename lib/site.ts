@@ -47,11 +47,16 @@ export const bookingHref: string = site.booking.url || enquiryMailto;
 
 export const bookingIsLive = Boolean(site.booking.url);
 
+/**
+ * Root-relative, not bare hashes. `#services` resolves against the *current*
+ * path, so from /voice-agents it would scroll nowhere; `/#services` returns
+ * home and lands on the section from any page.
+ */
 export const nav = [
-  { label: "What we build", href: "#services" },
-  { label: "How it works", href: "#process" },
-  { label: "Work", href: "#work" },
-  { label: "FAQ", href: "#faq" },
+  { label: "What we build", href: "/#services" },
+  { label: "How it works", href: "/#process" },
+  { label: "Work", href: "/#work" },
+  { label: "FAQ", href: "/#faq" },
 ] as const;
 
 /* ------------------------------------------------------------------ metrics */
