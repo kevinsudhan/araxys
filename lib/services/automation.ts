@@ -136,38 +136,6 @@ export const automation: ServicePage = {
     ],
   },
 
-  hardParts: {
-    eyebrow: "The hard parts",
-    title: "The failures that quietly cost more than the manual process did",
-    lead: "Bad automation is worse than none, because it fails at scale and without anyone watching. These six are what keep it honest.",
-    items: [
-      {
-        name: "Double processing",
-        body: "The same invoice paid twice is the classic automation disaster. Every step is keyed and idempotent, so a retry or a duplicate trigger produces exactly one outcome.",
-      },
-      {
-        name: "Half-finished runs",
-        body: "A failure between two writes leaves your systems disagreeing. Runs either complete or compensate — there is no state where the ERP and the CRM tell different stories.",
-      },
-      {
-        name: "Silent decay",
-        body: "The dangerous failure is the one nobody notices for a month. Divergence between expected and actual volumes raises an alert on its own.",
-      },
-      {
-        name: "Exception backlogs",
-        body: "If exceptions are painful to clear, they accumulate until the automation is abandoned. The worklist is designed for seconds-per-case, with context pre-assembled.",
-      },
-      {
-        name: "Change breaking it",
-        body: "Your systems will change. Contract tests on every external boundary fail loudly in staging rather than silently in production.",
-      },
-      {
-        name: "Nobody can explain it",
-        body: "Every run stores its inputs, steps, decisions and outputs. When finance asks why something posted, the answer is a record, not an archaeology exercise.",
-      },
-    ],
-  },
-
   useCases: {
     eyebrow: "Where it earns its place",
     title: "High volume, clear rules, and a handoff that always stalls",

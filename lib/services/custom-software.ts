@@ -136,38 +136,6 @@ export const customSoftware: ServicePage = {
     ],
   },
 
-  hardParts: {
-    eyebrow: "The hard parts",
-    title: "Why custom software gets a bad reputation",
-    lead: "Bespoke projects fail in predictable ways. Being explicit about them up front is most of the fix.",
-    items: [
-      {
-        name: "Scope with no edges",
-        body: "Open-ended builds drift until the budget runs out. Work is quoted as fixed-scope phases against an agreed architecture, so you approve cost per phase rather than signing a blank cheque.",
-      },
-      {
-        name: "The 90%-done project",
-        body: "Shipping in two-week increments that real people use means value arrives continuously. There is no six-month gap ending in a launch that misses the point.",
-      },
-      {
-        name: "Nobody can maintain it",
-        body: "Conventional stack, ordinary patterns, tests and documentation. We optimise for the engineer who inherits this, not for how clever it looks.",
-      },
-      {
-        name: "Dependency by design",
-        body: "Some firms leave you unable to change anything without them. Handover is a deliverable here, and we would rather you did not need us next year.",
-      },
-      {
-        name: "Built for the demo",
-        body: "Software that works on clean data and collapses on yours. We build against your real data and real edge cases from the first increment.",
-      },
-      {
-        name: "Security as an afterthought",
-        body: "Authentication, authorisation, audit and data handling are architectural decisions made in week two — not a penetration test panic before launch.",
-      },
-    ],
-  },
-
   useCases: {
     eyebrow: "Where it earns its place",
     title: "When the spreadsheet beside the system is the real system",

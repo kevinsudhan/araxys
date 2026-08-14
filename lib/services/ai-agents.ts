@@ -138,8 +138,6 @@ export const aiAgents: ServicePage = {
     ],
   },
 
-  // hardParts intentionally omitted for this page — client-requested removal.
-
   useCases: {
     eyebrow: "Where they earn their place",
     title: "Processes that repeat, span systems, and stall on handoffs",

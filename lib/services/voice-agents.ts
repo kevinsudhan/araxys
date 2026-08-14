@@ -5,8 +5,6 @@ export const voiceAgents: ServicePage = {
   serviceId: "voice-agents",
   glyph: "voice",
   navLabel: "Voice Agents",
-  // Also client-requested: skip the "rest of what we do" cross-links.
-  showRelated: false,
   eyebrow: "AI Voice Agents",
   title: "A voice agent that answers every call — on the number you already use",
   lead: "It picks up on the first ring, understands what the caller wants, looks the answer up in your own systems, and hands to a person the moment it should. No new phone number, no rebuilt call flow.",
@@ -185,9 +183,6 @@ export const voiceAgents: ServicePage = {
       },
     ],
   },
-
-  // hardParts intentionally omitted for this page — the section reads as
-  // padding here and the client asked for it removed.
 
   useCases: {
     eyebrow: "Where it earns its place",

@@ -136,38 +136,6 @@ export const integrations: ServicePage = {
     ],
   },
 
-  hardParts: {
-    eyebrow: "The hard parts",
-    title: "Why integrations rot, and what stops it",
-    lead: "Almost every integration works on the day it ships. These six are what determine whether it still works two years later.",
-    items: [
-      {
-        name: "Schema drift",
-        body: "Vendors add, rename and deprecate fields on their own schedule. Contract tests catch a changed response in CI rather than in your data three weeks later.",
-      },
-      {
-        name: "Rate limits",
-        body: "Hit a limit mid-sync and naive code drops records silently. Requests are queued and throttled per vendor, and a backlog drains rather than disappearing.",
-      },
-      {
-        name: "Duplicate writes",
-        body: "Retries are unavoidable, so writes are keyed and idempotent. A repeated call updates the same record instead of creating a second one.",
-      },
-      {
-        name: "Conflicting truth",
-        body: "When two systems disagree about the same customer, someone has to decide which wins. That rule is defined during mapping and enforced in code, not left to timing.",
-      },
-      {
-        name: "Credential expiry",
-        body: "Tokens expire, service accounts get disabled, certificates lapse. Rotation is automated and expiry is monitored, because this is the most common cause of a 3am outage.",
-      },
-      {
-        name: "The bus factor",
-        body: "Bespoke scripts that only one person understands are a liability. Everything is versioned, documented and tested in your repository, with a runbook.",
-      },
-    ],
-  },
-
   useCases: {
     eyebrow: "Where it earns its place",
     title: "Wherever your data is currently moved by a person",

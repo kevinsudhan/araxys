@@ -138,38 +138,6 @@ export const knowledge: ServicePage = {
     ],
   },
 
-  hardParts: {
-    eyebrow: "The hard parts",
-    title: "Why a weekend RAG prototype does not survive real documents",
-    lead: "Retrieval is easy to stand up and hard to make trustworthy. These six decide whether people keep using it after the novelty passes.",
-    items: [
-      {
-        name: "Permissions",
-        body: "The fastest way to kill a knowledge project is one person seeing a salary review. Access is resolved per query against your existing identity provider, not approximated at index time.",
-      },
-      {
-        name: "Staleness",
-        body: "A superseded policy quoted with total confidence is worse than no answer. Sources are re-indexed on change, and answers carry the date of the document they came from.",
-      },
-      {
-        name: "Chunking",
-        body: "Split a contract mid-clause and retrieval returns half an obligation. Strategy is chosen per corpus by measurement, not by copying a default from a tutorial.",
-      },
-      {
-        name: "Retrieval quality",
-        body: "Pure vector search misses exact terms — part numbers, policy codes, names. Hybrid search plus reranking is what makes the right passage actually surface.",
-      },
-      {
-        name: "Refusing to answer",
-        body: "The system is tuned to say 'this is not covered in what I can see' and point to a person. A confident invention costs more than an admission.",
-      },
-      {
-        name: "Proving accuracy",
-        body: "An evaluation set built from your real questions with known-correct answers, regression-tested every release, so quality is a number rather than an impression.",
-      },
-    ],
-  },
-
   useCases: {
     eyebrow: "Where it earns its place",
     title: "Anywhere the same question is answered by hand more than twice a day",

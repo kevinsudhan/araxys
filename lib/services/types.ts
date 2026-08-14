@@ -46,7 +46,6 @@ export type MediaSlot = {
   ratio?: string;
 };
 
-export type Capability = { name: string; body: string };
 export type UseCase = { name: string; line: string };
 export type Faq = { question: string; answer: string };
 
@@ -100,11 +99,7 @@ export type ServicePage = {
   };
 
   flow: { eyebrow: string; title: string; steps: FlowStep[] };
-  /** Omit to skip the section on this page entirely. */
-  hardParts?: { eyebrow: string; title: string; lead: string; items: Capability[] };
   useCases: { eyebrow: string; title: string; lead: string; items: UseCase[] };
-  /** Set false to skip the "also built here" cross-links on this page. */
-  showRelated?: boolean;
 
   topology: Topology;
   faqs: Faq[];
