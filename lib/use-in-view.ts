@@ -71,3 +71,56 @@ export function useInView<T extends Element>() {
 
   return { ref, inView } as const;
 }
+
+let prefetchObserver: IntersectionObserver | null = null;
+const prefetchCallbacks = new WeakMap<Element, Entry>();
+
+/**
+ * Separate from `getObserver` on purpose: reveals want to wait until an
+ * element is genuinely on screen, but a lazy video wants the opposite — its
+ * fetch should start before the visitor scrolls to it, so playback is already
+ * running by the time they arrive. A large positive rootMargin fires while the
+ * element is still off-screen, well ahead of the viewport.
+ */
+function getPrefetchObserver(): IntersectionObserver | null {
+  if (typeof window === "undefined" || !("IntersectionObserver" in window)) return null;
+  prefetchObserver ??= new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        prefetchCallbacks.get(entry.target)?.(true);
+        prefetchObserver?.unobserve(entry.target);
+        prefetchCallbacks.delete(entry.target);
+      }
+    },
+    { rootMargin: "800px 0px 800px 0px", threshold: 0 },
+  );
+  return prefetchObserver;
+}
+
+/** Fires once, up to 800px before the element reaches the viewport. */
+export function useNearView<T extends Element>() {
+  const ref = useRef<T | null>(null);
+  const [near, setNear] = useState(false);
+
+  useEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+
+    const io = getPrefetchObserver();
+    if (!io) {
+      setNear(true);
+      return;
+    }
+
+    prefetchCallbacks.set(element, setNear);
+    io.observe(element);
+
+    return () => {
+      io.unobserve(element);
+      prefetchCallbacks.delete(element);
+    };
+  }, []);
+
+  return { ref, near } as const;
+}

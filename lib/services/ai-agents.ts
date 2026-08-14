@@ -138,37 +138,7 @@ export const aiAgents: ServicePage = {
     ],
   },
 
-  hardParts: {
-    eyebrow: "The hard parts",
-    title: "Why most agent pilots never reach production",
-    lead: "Agents demo beautifully and fail quietly. These are the six problems that decide whether one survives contact with real data.",
-    items: [
-      {
-        name: "Scope creep mid-run",
-        body: "An agent given broad tools will find creative uses for them. Access is granted per action, so it cannot wander into systems nobody intended.",
-      },
-      {
-        name: "Confident wrong answers",
-        body: "Outputs are validated against a schema and cross-checked before anything downstream consumes them. Failing a check stops the run rather than passing bad data on.",
-      },
-      {
-        name: "Tool failures",
-        body: "Third-party APIs time out and rate-limit. Steps are idempotent with typed retries, so a retry never double-charges or duplicates a record.",
-      },
-      {
-        name: "Runaway loops",
-        body: "Step, time and cost ceilings are enforced by the runtime. An agent that cannot make progress halts and reports instead of burning budget.",
-      },
-      {
-        name: "No way to debug it",
-        body: "Every run produces a replayable trace. When something goes wrong you read what happened rather than guessing at a prompt.",
-      },
-      {
-        name: "Drift after launch",
-        body: "An evaluation suite built from your real cases runs against every change, so a prompt tweak cannot quietly regress last month's accuracy.",
-      },
-    ],
-  },
+  // hardParts intentionally omitted for this page — client-requested removal.
 
   useCases: {
     eyebrow: "Where they earn their place",

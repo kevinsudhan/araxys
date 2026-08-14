@@ -5,6 +5,8 @@ export const voiceAgents: ServicePage = {
   serviceId: "voice-agents",
   glyph: "voice",
   navLabel: "Voice Agents",
+  // Also client-requested: skip the "rest of what we do" cross-links.
+  showRelated: false,
   eyebrow: "AI Voice Agents",
   title: "A voice agent that answers every call — on the number you already use",
   lead: "It picks up on the first ring, understands what the caller wants, looks the answer up in your own systems, and hands to a person the moment it should. No new phone number, no rebuilt call flow.",
@@ -184,37 +186,8 @@ export const voiceAgents: ServicePage = {
     ],
   },
 
-  hardParts: {
-    eyebrow: "The hard parts",
-    title: "Everything that separates a demo from a deployment",
-    lead: "A voice agent is easy to demonstrate and difficult to run. These are the failure modes that decide whether callers trust it in week three.",
-    items: [
-      {
-        name: "Interruptions",
-        body: "Barge-in is handled properly: when the caller cuts in, the agent stops talking mid-word and listens, the way a person would.",
-      },
-      {
-        name: "Silence and hesitation",
-        body: "It distinguishes someone thinking from someone finished, so it neither talks over people nor leaves dead air.",
-      },
-      {
-        name: "Accents and line noise",
-        body: "Tuned against your real call recordings rather than a clean demo set, because that is what your callers actually sound like.",
-      },
-      {
-        name: "Grounded answers",
-        body: "It answers only from your documents and systems. Where it does not know, it says so and escalates — it does not improvise.",
-      },
-      {
-        name: "Rules you set",
-        body: "You define what it must never attempt alone: refunds over a threshold, cancellations, anything legal or clinical.",
-      },
-      {
-        name: "Compliance",
-        body: "Recording consent, PII redaction in transcripts, and retention windows you choose — with a full audit trail.",
-      },
-    ],
-  },
+  // hardParts intentionally omitted for this page — the section reads as
+  // padding here and the client asked for it removed.
 
   useCases: {
     eyebrow: "Where it earns its place",

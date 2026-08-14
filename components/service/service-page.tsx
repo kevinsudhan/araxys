@@ -18,6 +18,18 @@ import type { ServicePage as ServicePageData } from "@/lib/services/types";
  */
 export function ServicePageView({ page }: { page: ServicePageData }) {
   const others = servicePages.filter((other) => other.slug !== page.slug);
+  const showHardParts = Boolean(page.hardParts);
+  const showRelated = page.showRelated ?? true;
+
+  // Sections after "detail" (01) and "flow" (02) are conditional per page, so
+  // the eyebrow index is computed rather than hard-coded — omitting a section
+  // renumbers the ones after it instead of leaving a gap like 01, 02, 04.
+  let index = 2;
+  const nextIndex = () => String(++index).padStart(2, "0");
+  const hardPartsIndex = showHardParts ? nextIndex() : "";
+  const useCasesIndex = nextIndex();
+  const faqIndex = nextIndex();
+  const relatedIndex = showRelated ? nextIndex() : "";
 
   return (
     <>
@@ -200,35 +212,39 @@ export function ServicePageView({ page }: { page: ServicePageData }) {
       </Section>
 
       {/* -------------------------------------------------------- hard parts */}
-      <Section
-        id="hard-parts"
-        index="03"
-        eyebrow={page.hardParts.eyebrow}
-        title={page.hardParts.title}
-        lead={page.hardParts.lead}
-        tone="canvas"
-      >
-        <ul className="grid gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
-          {page.hardParts.items.map((item, index) => (
-            <Reveal key={item.name} as="li" delay={index * 40} className="bg-surface">
-              <div className="h-full p-7 lg:p-8">
-                <span className="label text-ink-faint">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-                <h3 className="mt-5 text-[1.0625rem] font-medium tracking-[-0.02em] text-ink">
-                  {item.name}
-                </h3>
-                <p className="mt-2.5 text-[0.875rem] leading-relaxed text-ink-muted">{item.body}</p>
-              </div>
-            </Reveal>
-          ))}
-        </ul>
-      </Section>
+      {showHardParts && page.hardParts ? (
+        <Section
+          id="hard-parts"
+          index={hardPartsIndex}
+          eyebrow={page.hardParts.eyebrow}
+          title={page.hardParts.title}
+          lead={page.hardParts.lead}
+          tone="canvas"
+        >
+          <ul className="grid gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
+            {page.hardParts.items.map((item, itemIndex) => (
+              <Reveal key={item.name} as="li" delay={itemIndex * 40} className="bg-surface">
+                <div className="h-full p-7 lg:p-8">
+                  <span className="label text-ink-faint">
+                    {String(itemIndex + 1).padStart(2, "0")}
+                  </span>
+                  <h3 className="mt-5 text-[1.0625rem] font-medium tracking-[-0.02em] text-ink">
+                    {item.name}
+                  </h3>
+                  <p className="mt-2.5 text-[0.875rem] leading-relaxed text-ink-muted">
+                    {item.body}
+                  </p>
+                </div>
+              </Reveal>
+            ))}
+          </ul>
+        </Section>
+      ) : null}
 
       {/* --------------------------------------------------------- use cases */}
       <Section
         id="use-cases"
-        index="04"
+        index={useCasesIndex}
         eyebrow={page.useCases.eyebrow}
         title={page.useCases.title}
         lead={page.useCases.lead}
@@ -284,7 +300,7 @@ export function ServicePageView({ page }: { page: ServicePageData }) {
       {/* -------------------------------------------------------------- FAQ */}
       <Section
         id="service-faq"
-        index="05"
+        index={faqIndex}
         eyebrow="FAQ"
         title="What teams ask before they commit"
         tone="canvas"
@@ -293,32 +309,34 @@ export function ServicePageView({ page }: { page: ServicePageData }) {
       </Section>
 
       {/* ------------------------------------------------------------ other */}
-      <Section
-        id="more"
-        index="06"
-        eyebrow="Also built here"
-        title="The rest of what we do"
-        tone="surface"
-      >
-        <ul className="grid gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
-          {others.map((other) => (
-            <li key={other.slug}>
-              <Link
-                href={`/${other.slug}`}
-                className="group flex h-full flex-col bg-surface p-7 transition-colors duration-300 hover:bg-sunken lg:p-8"
-              >
-                <h3 className="flex items-center gap-2 text-[1.0625rem] font-medium tracking-[-0.02em] text-ink">
-                  {other.navLabel}
-                  <ArrowRight className="size-3.5 text-ink-faint" />
-                </h3>
-                <p className="mt-2.5 text-[0.875rem] leading-relaxed text-ink-muted">
-                  {other.metaDescription}
-                </p>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </Section>
+      {showRelated ? (
+        <Section
+          id="more"
+          index={relatedIndex}
+          eyebrow="Also built here"
+          title="The rest of what we do"
+          tone="surface"
+        >
+          <ul className="grid gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
+            {others.map((other) => (
+              <li key={other.slug}>
+                <Link
+                  href={`/${other.slug}`}
+                  className="group flex h-full flex-col bg-surface p-7 transition-colors duration-300 hover:bg-sunken lg:p-8"
+                >
+                  <h3 className="flex items-center gap-2 text-[1.0625rem] font-medium tracking-[-0.02em] text-ink">
+                    {other.navLabel}
+                    <ArrowRight className="size-3.5 text-ink-faint" />
+                  </h3>
+                  <p className="mt-2.5 text-[0.875rem] leading-relaxed text-ink-muted">
+                    {other.metaDescription}
+                  </p>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </Section>
+      ) : null}
 
       <Cta />
     </>

@@ -1,15 +1,18 @@
 "use client";
 
-import { useInView } from "@/lib/use-in-view";
+import { useNearView } from "@/lib/use-in-view";
 
 /**
- * A decorative looping video that does not exist until it is on screen.
+ * A decorative looping video that does not exist until it is nearly on screen.
  *
  * `autoplay` makes a browser fetch the entire file at page load, even below the
- * fold — 6.5MB for a five-second loop, spent by every visitor whether or not
- * they scroll that far. Withholding `src` until the frame enters the viewport
- * moves that cost to the people who actually see it. The aspect ratio is
- * reserved by the parent frame, so nothing shifts when it arrives.
+ * fold, so `src` is withheld until the frame is close to the viewport — moving
+ * that cost to visitors who actually scroll there. It uses `useNearView`
+ * (an 800px lookahead) rather than the reveal observer's on-screen trigger: by
+ * the time the frame is actually visible, the (now small, transcoded) file has
+ * had a head start to fetch, so playback is already running rather than
+ * starting from a blank first frame. The aspect ratio is reserved by the
+ * parent frame, so nothing shifts when it arrives.
  */
 export function LoopVideo({
   src,
@@ -20,12 +23,12 @@ export function LoopVideo({
   poster?: string;
   className?: string;
 }) {
-  const { ref, inView } = useInView<HTMLVideoElement>();
+  const { ref, near } = useNearView<HTMLVideoElement>();
 
   return (
     <video
       ref={ref}
-      {...(inView ? { src } : {})}
+      {...(near ? { src } : {})}
       poster={poster}
       muted
       loop
