@@ -13,7 +13,32 @@ export const aiAgents: ServicePage = {
     "Goal-driven AI agents that run multi-step business processes end to end across your systems, with scoped tool access, explicit guardrails and a human checkpoint wherever you want one.",
 
   heroPrimaryCta: "Map a process with us",
-  heroMedia: { label: "Agent run — trace view", hint: "public/agents/trace.mp4" },
+  heroMedia: {
+    label: "Agents that finish the work",
+    hint: "public/agents/hero.mp4",
+    src: "/agents/hero.mp4",
+    kind: "video",
+    mode: "loop",
+    ratio: "1/1",
+  },
+
+  /** Decorative stills beneath the use-case grid. */
+  useCaseMedia: [
+    {
+      label: "Scoped, not open-ended",
+      hint: "public/agents/scoped-access.webp",
+      src: "/agents/scoped-access.webp",
+      kind: "image",
+      ratio: "1/1",
+    },
+    {
+      label: "A checkpoint, wherever you want one",
+      hint: "public/agents/checkpoint.webp",
+      src: "/agents/checkpoint.webp",
+      kind: "image",
+      ratio: "1/1",
+    },
+  ],
 
   factsHeading: "How they are built",
   facts: [

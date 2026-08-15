@@ -13,7 +13,32 @@ export const customSoftware: ServicePage = {
     "Purpose-built applications designed around the workflow you actually run, deployed in your environment, owned outright by you — with the documentation and tests to change it without us.",
 
   heroPrimaryCta: "Talk through what you need",
-  heroMedia: { label: "Internal tool — interface walkthrough", hint: "public/software/app.mp4" },
+  heroMedia: {
+    label: "Layered around what you need",
+    hint: "public/software/hero.mp4",
+    src: "/software/hero.mp4",
+    kind: "video",
+    mode: "loop",
+    ratio: "1/1",
+  },
+
+  /** Decorative stills beneath the use-case grid. */
+  useCaseMedia: [
+    {
+      label: "Yours from day one",
+      hint: "public/software/yours-from-day-one.webp",
+      src: "/software/yours-from-day-one.webp",
+      kind: "image",
+      ratio: "1/1",
+    },
+    {
+      label: "Documented, not a black box",
+      hint: "public/software/documented.webp",
+      src: "/software/documented.webp",
+      kind: "image",
+      ratio: "1/1",
+    },
+  ],
 
   factsHeading: "The terms of the engagement",
   facts: [
@@ -23,7 +48,7 @@ export const customSoftware: ServicePage = {
       note: "Source in your repository from the first commit. No licence, no lock-in.",
     },
     {
-      value: "2 wks",
+      value: "2 weeks",
       label: "To architecture",
       note: "A documented design and a fixed price, before any code is written.",
     },

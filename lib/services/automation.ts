@@ -13,7 +13,32 @@ export const automation: ServicePage = {
     "Orchestrated business process automation with typed state, idempotent steps, retries and alerting — so work clears overnight and real exceptions are surfaced rather than buried.",
 
   heroPrimaryCta: "Map your slowest process",
-  heroMedia: { label: "Run history — dashboard", hint: "public/automation/runs.png" },
+  heroMedia: {
+    label: "Work that moves on its own",
+    hint: "public/automation/hero.mp4",
+    src: "/automation/hero.mp4",
+    kind: "video",
+    mode: "loop",
+    ratio: "1/1",
+  },
+
+  /** Decorative stills beneath the use-case grid. */
+  useCaseMedia: [
+    {
+      label: "Only the real exceptions surface",
+      hint: "public/automation/exceptions-surfaced.webp",
+      src: "/automation/exceptions-surfaced.webp",
+      kind: "image",
+      ratio: "1/1",
+    },
+    {
+      label: "Runs in your cloud",
+      hint: "public/automation/runs-in-your-cloud.webp",
+      src: "/automation/runs-in-your-cloud.webp",
+      kind: "image",
+      ratio: "1/1",
+    },
+  ],
 
   factsHeading: "How it is engineered",
   facts: [
