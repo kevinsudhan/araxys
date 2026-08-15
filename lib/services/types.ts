@@ -43,6 +43,8 @@ export type MediaSlot = {
   kind?: "video" | "image";
   /** loop = decorative autoplay; player = real content with controls. */
   mode?: "loop" | "player";
+  /** Player only. "cover" crops to the frame; omit for the safe "contain". */
+  fit?: "contain" | "cover";
   ratio?: string;
 };
 
@@ -82,7 +84,14 @@ export type ServicePage = {
   metaDescription: string;
 
   heroPrimaryCta: string;
+  /** Rendered in the hero's right-hand panel. No src yet → shows a placeholder. */
   heroMedia: MediaSlot;
+  /** Exactly three, shown as a compact row under the CTAs. */
+  heroStats?: [
+    { label: string; value: string },
+    { label: string; value: string },
+    { label: string; value: string },
+  ];
   /** Optional looping visual that leads the flow section. */
   flowMedia?: MediaSlot;
   /** The pair beneath the use-case grid. Falls back to placeholders. */
@@ -99,6 +108,14 @@ export type ServicePage = {
   };
 
   flow: { eyebrow: string; title: string; steps: FlowStep[] };
+  /**
+   * "list" (default) is the standard Section: heading, then flowMedia (if
+   * any) full-width above the step list. "split" breaks out of the site's
+   * shared column the same way the hero does — steps on the left, flowMedia
+   * on the right, no side margin — for a page whose flow video earns that
+   * extra width. Opt in per page; most won't need it.
+   */
+  flowLayout?: "list" | "split";
   useCases: { eyebrow: string; title: string; lead: string; items: UseCase[] };
 
   topology: Topology;

@@ -14,27 +14,35 @@ export const voiceAgents: ServicePage = {
 
   heroPrimaryCta: "Hear it on your own call flow",
 
+  // Stat row shown under the CTAs — restatements of facts defined below and
+  // in the FAQ, not new claims.
+  heroStats: [
+    { label: "Your number", value: "Unchanged" },
+    { label: "Coverage", value: "24/7" },
+    { label: "Handoff", value: "Warm transfer" },
+  ],
+
   /**
-   * The explainer is light and near-monochrome, so it sits naturally on the
-   * canvas. It runs 25s with cuts to black, so it is a real player — controls,
-   * sound, and nothing downloaded until someone presses play.
+   * Real narrated content with on-screen text and audio, so it is a player —
+   * controls, sound, nothing downloaded until someone presses play.
    */
   heroMedia: {
-    label: "Explainer",
-    hint: "public/voice-agents/explainer.mp4",
-    src: "/voice-agents/explainer.mp4",
+    label: "Hero video",
+    hint: "public/voice-agents/hero.mp4",
+    src: "/voice-agents/hero.mp4",
     kind: "video",
     mode: "player",
+    // Full, unedited source, shown at its own native ratio — no cropping.
+    ratio: "1/1",
   },
 
-  /** Dark navy, 5s, seamless — decorative loop leading the call anatomy. */
+  /** Static title card — "Every call, answered." — leading the call anatomy. */
   flowMedia: {
-    label: "Call animation",
-    hint: "public/voice-agents/animation.mp4",
-    src: "/voice-agents/animation.mp4",
-    kind: "video",
-    mode: "loop",
-    ratio: "16/9",
+    label: "Every call, answered",
+    hint: "public/voice-agents/call-answered.webp",
+    src: "/voice-agents/call-answered.webp",
+    kind: "image",
+    ratio: "1536/2752",
   },
 
   /**
@@ -141,6 +149,7 @@ export const voiceAgents: ServicePage = {
     ],
   },
 
+  flowLayout: "split",
   flow: {
     eyebrow: "Anatomy of a call",
     title: "Answered, resolved and written back before the line clears",

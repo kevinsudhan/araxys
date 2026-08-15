@@ -7,33 +7,58 @@ import { ArrowRight, buttonClasses } from "@/components/ui/button";
 import { Container, EdgeRules } from "@/components/ui/container";
 import { MediaFrame } from "@/components/ui/media-frame";
 import { Reveal } from "@/components/ui/reveal";
-import { Section } from "@/components/ui/section";
+import { Eyebrow, Section } from "@/components/ui/section";
 import type { ServicePage as ServicePageData } from "@/lib/services/types";
+import { cn } from "@/lib/utils";
+
+/** The eyebrow row shared by both hero layouts. */
+function HeroEyebrow({ page }: { page: ServicePageData }) {
+  return (
+    <p className="flex items-center gap-3">
+      <Link
+        href="/#services"
+        className="label -my-2 -ml-2 inline-block px-2 py-2 text-ink-faint transition-colors hover:text-ink"
+      >
+        What we build
+      </Link>
+      <span aria-hidden className="h-px w-5 bg-line-strong" />
+      <span className="label text-navy">{page.eyebrow}</span>
+    </p>
+  );
+}
 
 /**
- * One template for every service page. The pages share a skeleton on purpose —
- * someone comparing two services should be comparing the services, not
- * re-learning a layout.
+ * The hero for every service page: text and a compact stat row on the left, a
+ * media panel on the right. One layout for all six — a reader comparing two
+ * services should be comparing the services, not re-learning a layout.
+ *
+ * The fixed header (h-16 / lg:h-[4.5rem]) sits out of document flow and
+ * overlaps document y=0, so the section is pushed below it with `mt` first —
+ * otherwise a `min-h` measured from y=0 ends short of the viewport bottom by
+ * exactly the header's height, letting the next section peek into view. With
+ * the section's own box starting at the header's bottom edge, reserving the
+ * rest of the viewport via `min-h` and centering its content inside lands
+ * the hero flush with the fold: header and hero fill the screen on load,
+ * nothing else, content centered in what's left.
+ *
+ * Unlike every other section, this one does not run through `Container` — it
+ * skips the site's shared 76rem measure so the media panel gets the full
+ * viewport width to work with rather than being squeezed to fit inside it.
+ * `EdgeRules` is dropped for the same reason: those hairlines are hard-coded
+ * to the 76rem column, so keeping them here would draw lines that no longer
+ * line up with the content around them.
  */
-export function ServicePageView({ page }: { page: ServicePageData }) {
+function Hero({ page }: { page: ServicePageData }) {
   return (
-    <>
-      {/* ------------------------------------------------------------- hero */}
-      <section className="relative overflow-hidden" aria-labelledby="service-title">
-        <EdgeRules />
-        <Container className="relative pt-32 pb-16 sm:pt-40 sm:pb-20 lg:pt-44">
-          <div className="max-w-[46rem]">
+    <section
+      className="relative mt-16 flex min-h-[calc(100vh-4rem)] items-center overflow-hidden lg:mt-[4.5rem] lg:min-h-[calc(100vh-4.5rem)]"
+      aria-labelledby="service-title"
+    >
+      <div className="relative w-full px-6 py-20 sm:px-8 sm:py-20 lg:px-10 lg:py-20">
+        <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.08fr)] lg:gap-16">
+          <div>
             <Reveal>
-              <p className="flex items-center gap-3">
-                <Link
-                  href="/#services"
-                  className="label -my-2 -ml-2 inline-block px-2 py-2 text-ink-faint transition-colors hover:text-ink"
-                >
-                  What we build
-                </Link>
-                <span aria-hidden className="h-px w-5 bg-line-strong" />
-                <span className="label text-navy">{page.eyebrow}</span>
-              </p>
+              <HeroEyebrow page={page} />
             </Reveal>
 
             <Reveal delay={80}>
@@ -43,7 +68,7 @@ export function ServicePageView({ page }: { page: ServicePageData }) {
             </Reveal>
 
             <Reveal delay={160}>
-              <p className="mt-7 max-w-[58ch] text-lead text-ink-muted">{page.lead}</p>
+              <p className="mt-7 max-w-[54ch] text-lead text-ink-muted">{page.lead}</p>
             </Reveal>
 
             <Reveal delay={220}>
@@ -60,21 +85,148 @@ export function ServicePageView({ page }: { page: ServicePageData }) {
                 </Link>
               </div>
             </Reveal>
+
+            {page.heroStats ? (
+              <Reveal delay={280}>
+                <dl className="mt-12 grid grid-cols-3 gap-6 border-t border-line pt-6">
+                  {page.heroStats.map((stat) => (
+                    <div key={stat.label}>
+                      <dt className="label text-ink-faint">{stat.label}</dt>
+                      <dd className="mt-1.5 text-[0.9375rem] font-medium text-ink">
+                        {stat.value}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              </Reveal>
+            ) : null}
           </div>
 
-          <Reveal delay={280}>
+          <Reveal delay={200} className="lg:max-w-[36rem] lg:justify-self-end lg:pl-4">
             <MediaFrame
-              ratio={page.heroMedia.ratio ?? "16/9"}
+              // Hero videos are shot 1:1 — match the shape before the asset
+              // arrives so a page never has to change ratio once it does.
+              ratio={page.heroMedia.ratio ?? "1/1"}
               label={page.heroMedia.label}
               hint={page.heroMedia.hint}
               src={page.heroMedia.src}
               kind={page.heroMedia.kind}
               mode={page.heroMedia.mode}
-              className="mt-14 shadow-panel lg:mt-20"
+              fit={page.heroMedia.fit}
+              className="shadow-lift"
             />
           </Reveal>
-        </Container>
-      </section>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/** The timeline list shared by both flow layouts. */
+function FlowSteps({
+  steps,
+  showMarker = true,
+  tight = false,
+}: {
+  steps: ServicePageData["flow"]["steps"];
+  /** Off for a page whose markers are call-timestamps rather than step numbers. */
+  showMarker?: boolean;
+  /** Tighter row spacing for a shorter, denser step list. */
+  tight?: boolean;
+}) {
+  return (
+    <ol className="relative">
+      {steps.map((step, index) => (
+        <Reveal key={step.id} as="li" delay={index * 40}>
+          <div
+            className={cn(
+              "group relative border-t border-line sm:pl-10",
+              tight ? "py-3" : "py-7",
+            )}
+          >
+            <span
+              aria-hidden
+              className="absolute top-[2.15rem] left-0 hidden size-[11px] rounded-full border border-line-strong bg-surface transition-colors duration-300 group-hover:border-navy group-hover:bg-navy sm:block"
+            />
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-baseline sm:gap-6">
+              {showMarker ? (
+                <span className="label w-14 shrink-0 tabular-nums text-ink-faint">
+                  {step.marker}
+                </span>
+              ) : null}
+              <div>
+                <h3 className="text-[1.0625rem] font-medium tracking-[-0.02em] text-ink">
+                  {step.name}
+                </h3>
+                <p className="mt-2 max-w-[62ch] text-[0.9375rem] leading-relaxed text-ink-muted">
+                  {step.line}
+                </p>
+              </div>
+            </div>
+          </div>
+        </Reveal>
+      ))}
+    </ol>
+  );
+}
+
+/**
+ * The flow section for a page with `flowLayout: "split"`: steps on the left,
+ * flowMedia on the right, no side margin — the same break-out treatment as
+ * the hero, for the same reason (the video earns more width than the site's
+ * shared 76rem column gives it).
+ */
+function FlowSplit({ page }: { page: ServicePageData }) {
+  return (
+    <section
+      id="flow"
+      className="relative overflow-hidden border-t border-line bg-surface"
+      aria-labelledby="flow-title"
+    >
+      <div className="relative px-6 py-12 sm:px-8 sm:py-14 lg:px-10 lg:py-6">
+        <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.08fr)] lg:gap-16">
+          <div>
+            <div className="mb-8 max-w-[46rem] lg:mb-4">
+              <Reveal>
+                <Eyebrow index="02">{page.flow.eyebrow}</Eyebrow>
+              </Reveal>
+              <Reveal delay={60}>
+                <h2 id="flow-title" className="mt-5 text-headline text-ink lg:mt-2">
+                  {page.flow.title}
+                </h2>
+              </Reveal>
+            </div>
+
+            <FlowSteps steps={page.flow.steps} showMarker={false} tight />
+          </div>
+
+          <Reveal delay={200} className="lg:-ml-16 lg:w-[23rem] lg:justify-self-center">
+            <MediaFrame
+              ratio={page.flowMedia?.ratio ?? "16/9"}
+              label={page.flowMedia?.label ?? ""}
+              hint={page.flowMedia?.hint}
+              src={page.flowMedia?.src}
+              kind={page.flowMedia?.kind}
+              mode={page.flowMedia?.mode}
+              fit={page.flowMedia?.fit}
+              className="shadow-lift"
+            />
+          </Reveal>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/**
+ * One template for every service page. The pages share a skeleton on purpose —
+ * someone comparing two services should be comparing the services, not
+ * re-learning a layout.
+ */
+export function ServicePageView({ page }: { page: ServicePageData }) {
+  return (
+    <>
+      <Hero page={page} />
 
       {/* ------------------------------------------------------------ facts */}
       <section className="relative border-t border-line bg-surface" aria-labelledby="service-facts">
@@ -144,57 +296,33 @@ export function ServicePageView({ page }: { page: ServicePageData }) {
       </Section>
 
       {/* ------------------------------------------------------------- flow */}
-      <Section
-        id="flow"
-        index="02"
-        eyebrow={page.flow.eyebrow}
-        title={page.flow.title}
-        tone="surface"
-      >
-        {page.flowMedia ? (
-          <Reveal className="mb-14 block">
-            <MediaFrame
-              ratio={page.flowMedia.ratio ?? "16/9"}
-              label={page.flowMedia.label}
-              hint={page.flowMedia.hint}
-              src={page.flowMedia.src}
-              kind={page.flowMedia.kind}
-              mode={page.flowMedia.mode}
-              className="shadow-panel"
-            />
-          </Reveal>
-        ) : null}
-
-        <ol className="relative">
-          <span
-            aria-hidden
-            className="absolute top-10 bottom-10 left-[5px] hidden w-px bg-line sm:block"
-          />
-          {page.flow.steps.map((step, index) => (
-            <Reveal key={step.id} as="li" delay={index * 40}>
-              <div className="group relative border-t border-line py-7 sm:pl-10">
-                <span
-                  aria-hidden
-                  className="absolute top-[2.15rem] left-0 hidden size-[11px] rounded-full border border-line-strong bg-surface transition-colors duration-300 group-hover:border-navy group-hover:bg-navy sm:block"
-                />
-                <div className="flex flex-col gap-2 sm:flex-row sm:items-baseline sm:gap-6">
-                  <span className="label w-14 shrink-0 tabular-nums text-ink-faint">
-                    {step.marker}
-                  </span>
-                  <div>
-                    <h3 className="text-[1.0625rem] font-medium tracking-[-0.02em] text-ink">
-                      {step.name}
-                    </h3>
-                    <p className="mt-2 max-w-[62ch] text-[0.9375rem] leading-relaxed text-ink-muted">
-                      {step.line}
-                    </p>
-                  </div>
-                </div>
-              </div>
+      {page.flowLayout === "split" ? (
+        <FlowSplit page={page} />
+      ) : (
+        <Section
+          id="flow"
+          index="02"
+          eyebrow={page.flow.eyebrow}
+          title={page.flow.title}
+          tone="surface"
+        >
+          {page.flowMedia ? (
+            <Reveal className="mb-14 block">
+              <MediaFrame
+                ratio={page.flowMedia.ratio ?? "16/9"}
+                label={page.flowMedia.label}
+                hint={page.flowMedia.hint}
+                src={page.flowMedia.src}
+                kind={page.flowMedia.kind}
+                mode={page.flowMedia.mode}
+                className="shadow-panel"
+              />
             </Reveal>
-          ))}
-        </ol>
-      </Section>
+          ) : null}
+
+          <FlowSteps steps={page.flow.steps} />
+        </Section>
+      )}
 
       {/* --------------------------------------------------------- use cases */}
       <Section

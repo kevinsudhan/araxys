@@ -13,7 +13,38 @@ export const integrations: ServicePage = {
     "Production integrations into your CRM, ERP, ticketing, warehouse and internal services — versioned, contract-tested and observable, so intelligence arrives inside the tools your team already uses.",
 
   heroPrimaryCta: "Review your systems with us",
-  heroMedia: { label: "Integration map — diagram", hint: "public/integrations/map.png" },
+
+  // Real narrated content with on-screen text and audio, so it is a player —
+  // controls, sound, nothing downloaded until someone presses play. Native
+  // 1:1 source, no cropping needed.
+  heroMedia: {
+    label: "Everything connected",
+    hint: "public/integrations/hero.mp4",
+    src: "/integrations/hero.mp4",
+    kind: "video",
+    mode: "player",
+    ratio: "1/1",
+  },
+
+  /** Decorative loops beneath the use-case grid — muted, no controls. */
+  useCaseMedia: [
+    {
+      label: "Automate it",
+      hint: "public/integrations/automate-it.mp4",
+      src: "/integrations/automate-it.mp4",
+      kind: "video",
+      mode: "loop",
+      ratio: "16/9",
+    },
+    {
+      label: "Real-time insight",
+      hint: "public/integrations/real-time-insight.mp4",
+      src: "/integrations/real-time-insight.mp4",
+      kind: "video",
+      mode: "loop",
+      ratio: "16/9",
+    },
+  ],
 
   factsHeading: "How they are built",
   facts: [

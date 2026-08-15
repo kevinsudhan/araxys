@@ -17,6 +17,15 @@ export type MediaFrameProps = {
    *   player — content. Controls, sound, and nothing downloaded until played.
    */
   mode?: "loop" | "player";
+  /**
+   * "contain" (player default) never crops — the safe choice when a frame
+   * might not match the video's native ratio, since a narrated or on-screen-
+   * text video cropped arbitrarily could cut off part of what it's saying.
+   * "cover" (loop's only option) fills the frame and crops to it — pass this
+   * explicitly for a player-mode video whose content is fine to crop, e.g. one
+   * deliberately re-cut to match the frame it will sit in.
+   */
+  fit?: "contain" | "cover";
   poster?: string;
   alt?: string;
   className?: string;
@@ -37,11 +46,13 @@ export function MediaFrame({
   src,
   kind = "video",
   mode = "loop",
+  fit,
   poster,
   alt = "",
   className,
 }: MediaFrameProps) {
   const isPlayer = kind === "video" && mode === "player";
+  const playerFit = fit === "cover" ? "object-cover" : "object-contain";
 
   return (
     <figure
@@ -64,7 +75,7 @@ export function MediaFrame({
                  pulling the whole file down for visitors who never press play */
               preload="metadata"
               playsInline
-              className="size-full object-contain"
+              className={cn("size-full", playerFit)}
             />
           ) : (
             <LoopVideo src={src} poster={poster} className="size-full object-cover" />
