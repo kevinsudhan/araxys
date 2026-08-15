@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { BookCall } from "@/components/ui/book-call";
 import { ArrowRight } from "@/components/ui/button";
-import { Container, Crosshairs, EdgeRules } from "@/components/ui/container";
+import { Container, EdgeRules } from "@/components/ui/container";
 import { Reveal } from "@/components/ui/reveal";
 import { site } from "@/lib/site";
 
@@ -23,11 +23,18 @@ export function Cta() {
       <EdgeRules />
       <Container className="relative py-20 lg:py-28">
         <Reveal>
-          <div className="relative overflow-hidden rounded-xl bg-[#14213D] px-7 py-16 sm:px-12 lg:px-16 lg:py-24">
-            <div aria-hidden className="rule-field absolute inset-0" />
+          <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-[#182B52] via-[#141F3A] to-[#0B1226] px-7 py-16 sm:px-12 lg:px-16 lg:py-24">
             <div
               aria-hidden
-              className="absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_50%_0%,rgba(255,255,255,0.07),transparent_70%)]"
+              className="absolute -top-32 -right-16 size-[26rem] rounded-full bg-[radial-gradient(circle,rgba(76,196,143,0.22),transparent_70%)] blur-2xl"
+            />
+            <div
+              aria-hidden
+              className="absolute -bottom-40 -left-24 size-[30rem] rounded-full bg-[radial-gradient(circle,rgba(91,141,239,0.22),transparent_70%)] blur-2xl"
+            />
+            <div
+              aria-hidden
+              className="absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_50%_0%,rgba(255,255,255,0.08),transparent_70%)]"
             />
 
             <div className="relative mx-auto max-w-[46rem] text-center">
@@ -81,7 +88,7 @@ export function Cta() {
                 ))}
               </p>
 
-              <ul className="mt-12 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 border-t border-white/10 pt-8">
+              <ul className="mt-12 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 pt-8">
                 {assurances.map((assurance) => (
                   <li key={assurance} className="flex items-center gap-2.5">
                     <span aria-hidden className="size-1 rounded-full bg-[#4CC48F]" />
@@ -90,8 +97,6 @@ export function Cta() {
                 ))}
               </ul>
             </div>
-
-            <Crosshairs className="[&_span_span]:bg-white/25" />
           </div>
         </Reveal>
       </Container>
