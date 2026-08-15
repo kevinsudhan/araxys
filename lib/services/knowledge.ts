@@ -13,7 +13,34 @@ export const knowledge: ServicePage = {
     "Enterprise knowledge bases and RAG systems that answer from your own documents, cite their sources, respect your existing permissions, and refuse rather than invent.",
 
   heroPrimaryCta: "Test it on your own documents",
-  heroMedia: { label: "Answer with citations — screen recording", hint: "public/knowledge/answer.mp4" },
+  heroMedia: {
+    label: "Answer with citations",
+    hint: "public/knowledge/answer.mp4",
+    src: "/knowledge/answer.mp4",
+    kind: "video",
+    mode: "player",
+    ratio: "16/9",
+  },
+
+  /** Decorative loops beneath the use-case grid — muted, no controls. */
+  useCaseMedia: [
+    {
+      label: "One place to ask",
+      hint: "public/knowledge/one-place-to-ask.mp4",
+      src: "/knowledge/one-place-to-ask.mp4",
+      kind: "video",
+      mode: "loop",
+      ratio: "16/9",
+    },
+    {
+      label: "Inside the tools you already use",
+      hint: "public/knowledge/inside-the-tools.mp4",
+      src: "/knowledge/inside-the-tools.mp4",
+      kind: "video",
+      mode: "loop",
+      ratio: "16/9",
+    },
+  ],
 
   factsHeading: "What we commit to",
   facts: [
