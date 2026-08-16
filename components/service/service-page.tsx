@@ -172,9 +172,8 @@ function FlowSteps({
 
 /**
  * The flow section for a page with `flowLayout: "split"`: steps on the left,
- * flowMedia on the right, no side margin — the same break-out treatment as
- * the hero, for the same reason (the video earns more width than the site's
- * shared 76rem column gives it).
+ * flowMedia on the right, within the site's shared 76rem column like every
+ * other section.
  */
 function FlowSplit({ page }: { page: ServicePageData }) {
   return (
@@ -183,7 +182,8 @@ function FlowSplit({ page }: { page: ServicePageData }) {
       className="relative overflow-hidden border-t border-line bg-surface"
       aria-labelledby="flow-title"
     >
-      <div className="relative px-6 py-12 sm:px-8 sm:py-14 lg:px-10 lg:py-6">
+      <EdgeRules />
+      <Container className="relative py-12 sm:py-14 lg:py-10">
         <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.08fr)] lg:gap-16">
           <div>
             <div className="mb-8 max-w-[46rem] lg:mb-4">
@@ -213,7 +213,7 @@ function FlowSplit({ page }: { page: ServicePageData }) {
             />
           </Reveal>
         </div>
-      </div>
+      </Container>
     </section>
   );
 }
