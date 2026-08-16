@@ -195,8 +195,16 @@ function FlowSplit({ page }: { page: ServicePageData }) {
       className="relative overflow-hidden border-t border-line bg-surface"
       aria-labelledby="flow-title"
     >
-      <div className="relative px-6 py-12 sm:px-8 sm:py-14 lg:px-10 lg:py-6">
-        <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.08fr)] lg:gap-16">
+      <div className="relative mx-auto w-full max-w-[96rem] px-6 py-12 sm:px-8 sm:py-14 lg:px-10 lg:py-6">
+        {/*
+          Both tracks are sized to their content and the pair is centred,
+          rather than each taking a fraction of the full width. The media is a
+          fixed 23rem portrait card and the steps set to about 46rem, so on a
+          wide screen a fractional split left ~250px unused inside the text
+          track and ~230px stranded past the card. Sizing to content keeps the
+          two adjacent and centres the block as one composition.
+        */}
+        <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,46rem)_auto] lg:justify-center lg:gap-16">
           <div>
             <div className="mb-8 max-w-[46rem] lg:mb-4">
               <Reveal>
@@ -212,7 +220,7 @@ function FlowSplit({ page }: { page: ServicePageData }) {
             <FlowSteps steps={page.flow.steps} showMarker={false} tight />
           </div>
 
-          <Reveal delay={200} className="lg:-ml-16 lg:w-[23rem] lg:justify-self-center">
+          <Reveal delay={200} className="lg:w-[23rem]">
             <MediaFrame
               ratio={page.flowMedia?.ratio ?? "16/9"}
               label={page.flowMedia?.label ?? ""}
