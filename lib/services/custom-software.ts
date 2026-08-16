@@ -13,6 +13,12 @@ export const customSoftware: ServicePage = {
     "Purpose-built applications designed around the workflow you actually run, deployed in your environment, owned outright by you — with the documentation and tests to change it without us.",
 
   heroPrimaryCta: "Talk through what you need",
+  /** DRAFT — drawn from `facts` below. Confirm before this ships. */
+  heroStats: [
+    { label: "The source", value: "Yours" },
+    { label: "To architecture", value: "2 weeks" },
+    { label: "Per-seat fees", value: "None" },
+  ],
   heroMedia: {
     label: "Layered around what you need",
     hint: "public/software/hero.mp4",

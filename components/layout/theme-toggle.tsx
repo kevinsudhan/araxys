@@ -1,27 +1,59 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { motion, useMotionValue, useTransform } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 
 const STORAGE_KEY = "araxys-theme";
 
-export function ThemeToggle() {
-  const [theme, setTheme] = useState<"light" | "dark" | null>(null);
+/** Matches --theme-transition in globals.css. */
+const TRANSITION_MS = 400;
 
-  // Read the theme the inline boot script already applied, so the button
-  // label matches the document from the first paint the user can interact with.
+export function ThemeToggle() {
+  /*
+   * The server cannot know the theme, so it renders the light state and an
+   * effect corrects it from the class the inline boot script already applied.
+   * That correction must not animate — otherwise every page load in dark mode
+   * would play a sun-to-moon spin. `animated` stays false until the visitor
+   * actually clicks, which makes the first sync instant and every real toggle
+   * animated.
+   */
+  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [animated, setAnimated] = useState(false);
+
   useEffect(() => {
     setTheme(document.documentElement.classList.contains("dark") ? "dark" : "light");
   }, []);
 
+  const timer = useRef<number | undefined>(undefined);
+  useEffect(() => () => window.clearTimeout(timer.current), []);
+
   function toggle() {
     const next = theme === "dark" ? "light" : "dark";
     setTheme(next);
-    document.documentElement.classList.toggle("dark", next === "dark");
+    setAnimated(true);
+
+    const root = document.documentElement;
+
+    /*
+     * Swapping the `dark` class repoints every colour token at once, which is
+     * instantaneous and reads as a hard cut. `theme-transition` puts a colour
+     * transition on everything for the length of the swap and is then removed,
+     * so it never interferes with hover states or scroll reveals.
+     */
+    root.classList.add("theme-transition");
+    root.classList.toggle("dark", next === "dark");
+
+    window.clearTimeout(timer.current);
+    timer.current = window.setTimeout(
+      () => root.classList.remove("theme-transition"),
+      TRANSITION_MS,
+    );
+
     try {
       localStorage.setItem(STORAGE_KEY, next);
     } catch {
-      // Private browsing modes can throw on write. The toggle still works
-      // for this session; it just will not be remembered.
+      // Private browsing modes can throw on write. The toggle still works for
+      // this session; it just will not be remembered.
     }
   }
 
@@ -33,32 +65,89 @@ export function ThemeToggle() {
       aria-label={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
       className="inline-flex size-11 items-center justify-center rounded-md border border-line-strong bg-surface text-ink-muted transition-colors duration-200 hover:border-ink/25 hover:text-ink lg:size-9"
     >
-      {/* Both glyphs render; opacity swaps on the html.dark class so there is
-          no icon flash before hydration. */}
-      <svg
-        aria-hidden
-        viewBox="0 0 20 20"
-        fill="none"
+      <SolarSwitch isDark={theme === "dark"} animated={animated} />
+    </button>
+  );
+}
+
+/**
+ * Sun and moon share one frame. Each scales in or out, and its stroke draws
+ * itself on via a pathLength derived from that scale — so the rays retract
+ * into the centre as the crescent draws itself, rather than the two glyphs
+ * simply crossfading.
+ */
+function SolarSwitch({ isDark, animated }: { isDark: boolean; animated: boolean }) {
+  const duration = animated ? 0.6 : 0;
+
+  const scaleSun = useMotionValue(isDark ? 0 : 1);
+  const scaleMoon = useMotionValue(isDark ? 1 : 0);
+
+  // The stroke only starts drawing once the glyph is most of the way scaled in,
+  // which keeps the two halves of the animation from muddying each other.
+  const pathLengthSun = useTransform(scaleSun, [0.6, 1], [0, 1]);
+  const pathLengthMoon = useTransform(scaleMoon, [0.6, 1], [0, 1]);
+
+  const sun = { checked: { scale: 0 }, unchecked: { scale: 1 } };
+  const moon = { checked: { scale: 1 }, unchecked: { scale: 0 } };
+
+  const rays = [
+    "M12.4058 1.76251V3.76251",
+    "M12.4058 21.7625V23.7625",
+    "M4.62598 4.98248L6.04598 6.40248",
+    "M18.7656 19.1225L20.1856 20.5425",
+    "M1.40576 12.7625H3.40576",
+    "M21.4058 12.7625H23.4058",
+    "M4.62598 20.5425L6.04598 19.1225",
+    "M18.7656 6.40248L20.1856 4.98248",
+  ];
+
+  return (
+    <motion.svg
+      // `initial={false}` so the correct glyph is simply present on mount.
+      // Without it every load would animate from sun to moon in dark mode.
+      initial={false}
+      animate={isDark ? "checked" : "unchecked"}
+      width="18"
+      height="18"
+      viewBox="0 0 25 25"
+      fill="none"
+      aria-hidden
+    >
+      <motion.path
+        d="M12.4058 17.7625C15.1672 17.7625 17.4058 15.5239 17.4058 12.7625C17.4058 10.0011 15.1672 7.76251 12.4058 7.76251C9.64434 7.76251 7.40576 10.0011 7.40576 12.7625C7.40576 15.5239 9.64434 17.7625 12.4058 17.7625Z"
         stroke="currentColor"
-        strokeWidth="1.2"
-        strokeLinecap="round"
-        className="size-[17px] dark:hidden"
-      >
-        <circle cx="10" cy="10" r="3.6" />
-        <path d="M10 2.4v2M10 15.6v2M2.4 10h2M15.6 10h2M4.7 4.7l1.4 1.4M13.9 13.9l1.4 1.4M15.3 4.7l-1.4 1.4M6.1 13.9l-1.4 1.4" />
-      </svg>
-      <svg
-        aria-hidden
-        viewBox="0 0 20 20"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.2"
+        strokeWidth={1.9}
         strokeLinecap="round"
         strokeLinejoin="round"
-        className="hidden size-[17px] dark:block"
-      >
-        <path d="M16.2 12.4A6.8 6.8 0 0 1 7.6 3.8a6.8 6.8 0 1 0 8.6 8.6Z" />
-      </svg>
-    </button>
+        variants={sun}
+        transition={{ duration }}
+        style={{ pathLength: pathLengthSun, scale: scaleSun }}
+      />
+
+      {rays.map((d) => (
+        <motion.path
+          key={d}
+          d={d}
+          stroke="currentColor"
+          strokeWidth={1.9}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          variants={sun}
+          transition={{ duration }}
+          style={{ pathLength: pathLengthSun, scale: scaleSun }}
+        />
+      ))}
+
+      <motion.path
+        d="M21.1918 13.2013C21.0345 14.9035 20.3957 16.5257 19.35 17.8781C18.3044 19.2305 16.8953 20.2571 15.2875 20.8379C13.6797 21.4186 11.9398 21.5294 10.2713 21.1574C8.60281 20.7854 7.07479 19.9459 5.86602 18.7371C4.65725 17.5283 3.81774 16.0003 3.4457 14.3318C3.07367 12.6633 3.18451 10.9234 3.76526 9.31561C4.346 7.70783 5.37263 6.29868 6.72501 5.25307C8.07739 4.20746 9.69959 3.56862 11.4018 3.41132C10.4052 4.75958 9.92564 6.42077 10.0503 8.09273C10.175 9.76469 10.8957 11.3364 12.0812 12.5219C13.2667 13.7075 14.8384 14.4281 16.5104 14.5528C18.1823 14.6775 19.8435 14.1979 21.1918 13.2013Z"
+        stroke="currentColor"
+        strokeWidth={1.9}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        variants={moon}
+        transition={{ duration }}
+        style={{ pathLength: pathLengthMoon, scale: scaleMoon }}
+      />
+    </motion.svg>
   );
 }

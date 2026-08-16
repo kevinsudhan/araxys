@@ -47,6 +47,10 @@ function HeroEyebrow({ page }: { page: ServicePageData }) {
  * `EdgeRules` is dropped for the same reason: those hairlines are hard-coded
  * to the 76rem column, so keeping them here would draw lines that no longer
  * line up with the content around them.
+ *
+ * It is capped at 96rem all the same. Breaking out of 76rem is about giving
+ * the media room, not about tracking the viewport forever: past ~1536px the
+ * columns drift apart and the h1 runs to a 850px+ line.
  */
 function Hero({ page }: { page: ServicePageData }) {
   return (
@@ -54,8 +58,8 @@ function Hero({ page }: { page: ServicePageData }) {
       className="relative mt-16 flex min-h-[calc(100vh-4rem)] items-center overflow-hidden lg:mt-[4.5rem] lg:min-h-[calc(100vh-4.5rem)]"
       aria-labelledby="service-title"
     >
-      <div className="relative w-full px-6 py-20 sm:px-8 sm:py-20 lg:px-10 lg:py-20">
-        <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.08fr)] lg:gap-16">
+      <div className="relative mx-auto w-full max-w-[96rem] px-6 py-20 sm:px-8 sm:py-20 lg:px-10 lg:py-16">
+        <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:gap-16">
           <div>
             <Reveal>
               <HeroEyebrow page={page} />
@@ -88,7 +92,7 @@ function Hero({ page }: { page: ServicePageData }) {
 
             {page.heroStats ? (
               <Reveal delay={280}>
-                <dl className="mt-12 grid grid-cols-3 gap-6 border-t border-line pt-6">
+                <dl className="mt-10 grid grid-cols-3 gap-6 border-t border-line pt-6">
                   {page.heroStats.map((stat) => (
                     <div key={stat.label}>
                       <dt className="label text-ink-faint">{stat.label}</dt>
@@ -102,7 +106,15 @@ function Hero({ page }: { page: ServicePageData }) {
             ) : null}
           </div>
 
-          <Reveal delay={200} className="lg:max-w-[36rem] lg:justify-self-end lg:pl-4">
+          {/*
+            No `justify-self-end` here. That collapses the grid item to
+            fit-content, so the media ignored its 925px column, sized itself
+            from the asset's intrinsic width instead, and sat pinned to the
+            right edge — leaving ~600px of dead space mid-hero and a different
+            media size on every page. Stretching to the track makes the panel
+            fill its column and stay identical across all six.
+          */}
+          <Reveal delay={200} className="w-full lg:pl-4">
             <MediaFrame
               // Hero videos are shot 1:1 — match the shape before the asset
               // arrives so a page never has to change ratio once it does.

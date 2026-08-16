@@ -223,6 +223,32 @@
 }
 
 /* ------------------------------------------------------------------
+   Theme transition
+
+   Toggling `.dark` on <html> repoints every colour token at once, so the
+   whole page cuts to the new theme in a single frame. `theme-transition` is
+   added by ThemeToggle for the length of the swap and then removed, which
+   crossfades the colours without leaving a permanent transition on every
+   element — that would slow down hover states and fight the scroll reveals.
+
+   Only colour properties are listed. Opacity and transform are deliberately
+   left out so a reveal firing mid-toggle still runs at its own timing.
+------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  html.theme-transition,
+  html.theme-transition *,
+  html.theme-transition *::before,
+  html.theme-transition *::after {
+    transition-property: background-color, border-color, color, fill, stroke,
+      box-shadow, outline-color, text-decoration-color;
+    transition-duration: 400ms; /* keep in step with TRANSITION_MS */
+    transition-timing-function: var(--ease-out-quint);
+    transition-delay: 0s;
+  }
+}
+
+/* ------------------------------------------------------------------
    Motion
    Reveal is driven by an IntersectionObserver that flips [data-revealed].
    Everything else is pure CSS so it stays off the main thread budget.

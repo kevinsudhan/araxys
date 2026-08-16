@@ -13,6 +13,12 @@ export const integrations: ServicePage = {
     "Production integrations into your CRM, ERP, ticketing, warehouse and internal services — versioned, contract-tested and observable, so intelligence arrives inside the tools your team already uses.",
 
   heroPrimaryCta: "Review your systems with us",
+  /** DRAFT — drawn from `facts` below. Confirm before this ships. */
+  heroStats: [
+    { label: "Every interface", value: "Versioned" },
+    { label: "Every boundary", value: "Tested" },
+    { label: "By default", value: "Observable" },
+  ],
 
   // Real narrated content with on-screen text and audio, so it is a player —
   // controls, sound, nothing downloaded until someone presses play. Native

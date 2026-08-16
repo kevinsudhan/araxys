@@ -13,6 +13,12 @@ export const knowledge: ServicePage = {
     "Enterprise knowledge bases and RAG systems that answer from your own documents, cite their sources, respect your existing permissions, and refuse rather than invent.",
 
   heroPrimaryCta: "Test it on your own documents",
+  /** DRAFT — drawn from `facts` below. Confirm before this ships. */
+  heroStats: [
+    { label: "Every answer", value: "Cited" },
+    { label: "Permissions", value: "Mirrored" },
+    { label: "When unsure", value: "Refuses" },
+  ],
   heroMedia: {
     label: "Answer with citations",
     hint: "public/knowledge/answer.mp4",

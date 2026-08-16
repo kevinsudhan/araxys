@@ -13,6 +13,12 @@ export const automation: ServicePage = {
     "Orchestrated business process automation with typed state, idempotent steps, retries and alerting — so work clears overnight and real exceptions are surfaced rather than buried.",
 
   heroPrimaryCta: "Map your slowest process",
+  /** DRAFT — drawn from `facts` below. Confirm before this ships. */
+  heroStats: [
+    { label: "Every step", value: "Idempotent" },
+    { label: "State", value: "Typed" },
+    { label: "On divergence", value: "Alerted" },
+  ],
   heroMedia: {
     label: "Work that moves on its own",
     hint: "public/automation/hero.mp4",

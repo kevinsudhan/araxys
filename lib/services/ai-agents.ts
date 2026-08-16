@@ -13,6 +13,12 @@ export const aiAgents: ServicePage = {
     "Goal-driven AI agents that run multi-step business processes end to end across your systems, with scoped tool access, explicit guardrails and a human checkpoint wherever you want one.",
 
   heroPrimaryCta: "Map a process with us",
+  /** DRAFT — drawn from `facts` below. Confirm before this ships. */
+  heroStats: [
+    { label: "Tool access", value: "Scoped" },
+    { label: "Every decision", value: "Traced" },
+    { label: "Mid-run halt", value: "Always" },
+  ],
   heroMedia: {
     label: "Agents that finish the work",
     hint: "public/agents/hero.mp4",
