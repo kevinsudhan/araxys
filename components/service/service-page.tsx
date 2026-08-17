@@ -58,7 +58,7 @@ function Hero({ page }: { page: ServicePageData }) {
       className="relative mt-16 flex min-h-[calc(100vh-4rem)] items-center overflow-hidden lg:mt-[4.5rem] lg:min-h-[calc(100vh-4.5rem)]"
       aria-labelledby="service-title"
     >
-      <div className="relative mx-auto w-full max-w-[96rem] px-6 py-20 sm:px-8 sm:py-20 lg:px-10 lg:py-16">
+      <div className="relative mx-auto w-full max-w-[96rem] px-6 py-20 sm:px-8 sm:py-20 lg:px-10 lg:py-12">
         <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:gap-16">
           <div>
             <Reveal>
@@ -113,8 +113,19 @@ function Hero({ page }: { page: ServicePageData }) {
             right edge — leaving ~600px of dead space mid-hero and a different
             media size on every page. Stretching to the track makes the panel
             fill its column and stay identical across all six.
+
+            `lg:w-[min(100%,calc(100vh-14rem))]` is the other half of that:
+            the track alone has no ceiling tied to the viewport's height, and
+            every hero panel is 1:1 — so on a wide-but-short window (a large
+            monitor with the browser not maximised, extra OS chrome, a
+            laptop with more taskbar than whoever last checked this) the
+            panel can grow wider, and therefore taller, than the `min-h`
+            budget has room for, pushing the hero past one screen. The calc
+            approximates that budget (header height + section padding), so
+            the panel's own height stays inside it instead of forcing the
+            section taller. It's a no-op on any normal-proportioned window.
           */}
-          <Reveal delay={200} className="w-full lg:pl-4">
+          <Reveal delay={200} className="w-full lg:ml-auto lg:w-[min(100%,calc(100vh-14rem))]">
             <MediaFrame
               // Hero videos are shot 1:1 — match the shape before the asset
               // arrives so a page never has to change ratio once it does.

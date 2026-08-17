@@ -68,7 +68,7 @@ export const viewport: Viewport = {
  */
 const boot = [
   `document.documentElement.classList.add("js");`,
-  `try{var t=localStorage.getItem("araxys-theme");var d=t?t==="dark":window.matchMedia("(prefers-color-scheme: dark)").matches;if(d)document.documentElement.classList.add("dark")}catch(e){}`,
+  `try{if(localStorage.getItem("araxys-theme")==="dark")document.documentElement.classList.add("dark")}catch(e){}`,
   // Last resort: if nothing has revealed after four seconds the observer never
   // ran (blocked hydration, exotic browser). Drop the flag so the page is
   // simply visible and unanimated rather than blank.
